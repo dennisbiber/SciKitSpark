@@ -13,7 +13,7 @@ class SciKitSparkLib(object):
 	def __init__(self, dataframe=None, csvPath=False, filepath=None, test_size=0.2):
 		if csvPath:
 			self.df = pd.read_csv(filepath, header=0)
-		elif dataset != None:
+		elif not dataframe.empty:
 			self.df = dataframe
 		else:
 			raise "You did not provide any data! Specify a dataset or csvPath."
@@ -22,10 +22,8 @@ class SciKitSparkLib(object):
 	def scalarTTS(self):
 		self.train, self.test = train_test_split(self.df, test_size=self.test_size)
 
-	def binomialTTS(self, key):
-		X = self.df.pop(key)
-		y = self.df
-		self.Xtrain, self.Xtest, self.Ytrain, self.Ytest = train_test_split(X.index. y, test_size=self.test_size)
+	def binomialTTS(self, X, y):
+		self.Xtrain, self.Xtest, self.Ytrain, self.Ytest = train_test_split(X, y, test_size=self.test_size)
 
 	def scalarSciKitLinearRegression(self):
 		regr = linear_model.LinearRegression()
@@ -118,7 +116,7 @@ class SciKitSparkLib(object):
 		return model
 
 	def interceptSciKit(self, model):
-		return model._intercept
+		return model.intercept_
 
 	def slopeSciKit(self, model):
 		return model.coef_
@@ -133,7 +131,7 @@ class SciKitSparkLib(object):
 		return model.summary.rootMeanSquaredError
 
 	def predictScalar(self, model):
-		return model.transform(self.test)
+		return model.predict(self.test)
 
 	def predictBinomial(self, model):
-		return model.transofrm(self.Xtest, self.Ytest)
+		return model.predict(self.Xtest)
